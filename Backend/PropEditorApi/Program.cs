@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PropEditorApi.Data;
 using PropEditorApi.Repository;
 using PropEditorApi.Services;
+using Serilog;
 
 namespace PropEditorApi
 {
@@ -11,6 +12,11 @@ namespace PropEditorApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, services, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.FromLogContext());
 
             // Add services to the container.
 
@@ -41,6 +47,8 @@ namespace PropEditorApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 

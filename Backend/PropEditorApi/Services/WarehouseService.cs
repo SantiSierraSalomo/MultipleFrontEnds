@@ -4,7 +4,7 @@ using PropEditorApi.Repository;
 
 namespace PropEditorApi.Services;
 
-public class WarehouseService(IWarehouseRepository repository) : IWarehouseService
+public class WarehouseService(IWarehouseRepository repository, ILogger<WarehouseService> logger) : IWarehouseService
 {
     public async Task<List<WarehouseDto>> GetAllAsync() =>
         (await repository.GetAllAsync()).Select(x => x.ToDto()).ToList();
@@ -15,6 +15,7 @@ public class WarehouseService(IWarehouseRepository repository) : IWarehouseServi
     public async Task<WarehouseDto> CreateAsync(WarehouseCreateDto dto)
     {
         var created = await repository.AddAsync(dto.ToEntity());
+        logger.LogInformation("Service created warehouse {WarehouseId}", created.WarehouseId);
         return created.ToDto();
     }
 
@@ -23,11 +24,13 @@ public class WarehouseService(IWarehouseRepository repository) : IWarehouseServi
         var current = await repository.GetByIdAsync(warehouseId);
         if (current is null)
         {
+            logger.LogWarning("Service could not find warehouse {WarehouseId} for update", warehouseId);
             return null;
         }
 
         current.ApplyUpdate(dto);
         await repository.UpdateAsync(current);
+        logger.LogInformation("Service updated warehouse {WarehouseId}", warehouseId);
         return current.ToDto();
     }
 
@@ -36,10 +39,12 @@ public class WarehouseService(IWarehouseRepository repository) : IWarehouseServi
         var current = await repository.GetByIdAsync(warehouseId);
         if (current is null)
         {
+            logger.LogWarning("Service could not find warehouse {WarehouseId} for delete", warehouseId);
             return false;
         }
 
         await repository.DeleteAsync(current);
+        logger.LogInformation("Service deleted warehouse {WarehouseId}", warehouseId);
         return true;
     }
 }

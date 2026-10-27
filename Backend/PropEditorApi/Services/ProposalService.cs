@@ -4,7 +4,7 @@ using PropEditorApi.Repository;
 
 namespace PropEditorApi.Services;
 
-public class ProposalService(IProposalRepository repository) : IProposalService
+public class ProposalService(IProposalRepository repository, ILogger<ProposalService> logger) : IProposalService
 {
     public async Task<List<ProposalDto>> GetAllAsync() =>
         (await repository.GetAllAsync()).Select(x => x.ToDto()).ToList();
@@ -15,6 +15,7 @@ public class ProposalService(IProposalRepository repository) : IProposalService
     public async Task<ProposalDto> CreateAsync(ProposalCreateDto dto)
     {
         var created = await repository.AddAsync(dto.ToEntity());
+        logger.LogInformation("Service created proposal {ItemId}/{WarehouseId}/{ProposalIndex}", created.ItemId, created.WarehouseId, created.ProposalIndex);
         return created.ToDto();
     }
 
@@ -23,11 +24,13 @@ public class ProposalService(IProposalRepository repository) : IProposalService
         var current = await repository.GetByIdAsync(itemId, warehouseId, proposalIndex);
         if (current is null)
         {
+            logger.LogWarning("Service could not find proposal {ItemId}/{WarehouseId}/{ProposalIndex} for update", itemId, warehouseId, proposalIndex);
             return null;
         }
 
         current.ApplyUpdate(dto);
         await repository.UpdateAsync(current);
+        logger.LogInformation("Service updated proposal {ItemId}/{WarehouseId}/{ProposalIndex}", itemId, warehouseId, proposalIndex);
         return current.ToDto();
     }
 
@@ -36,10 +39,12 @@ public class ProposalService(IProposalRepository repository) : IProposalService
         var current = await repository.GetByIdAsync(itemId, warehouseId, proposalIndex);
         if (current is null)
         {
+            logger.LogWarning("Service could not find proposal {ItemId}/{WarehouseId}/{ProposalIndex} for delete", itemId, warehouseId, proposalIndex);
             return false;
         }
 
         await repository.DeleteAsync(current);
+        logger.LogInformation("Service deleted proposal {ItemId}/{WarehouseId}/{ProposalIndex}", itemId, warehouseId, proposalIndex);
         return true;
     }
 }
