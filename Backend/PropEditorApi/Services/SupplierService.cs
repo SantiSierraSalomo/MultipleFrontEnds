@@ -1,0 +1,45 @@
+using PropEditorApi.Dto;
+using PropEditorApi.Mapping;
+using PropEditorApi.Repository;
+
+namespace PropEditorApi.Services;
+
+public class SupplierService(ISupplierRepository repository) : ISupplierService
+{
+    public async Task<List<SupplierDto>> GetAllAsync() =>
+        (await repository.GetAllAsync()).Select(x => x.ToDto()).ToList();
+
+    public async Task<SupplierDto?> GetByIdAsync(string supplierId) =>
+        (await repository.GetByIdAsync(supplierId))?.ToDto();
+
+    public async Task<SupplierDto> CreateAsync(SupplierCreateDto dto)
+    {
+        var created = await repository.AddAsync(dto.ToEntity());
+        return created.ToDto();
+    }
+
+    public async Task<SupplierDto?> UpdateAsync(string supplierId, SupplierUpdateDto dto)
+    {
+        var current = await repository.GetByIdAsync(supplierId);
+        if (current is null)
+        {
+            return null;
+        }
+
+        current.ApplyUpdate(dto);
+        await repository.UpdateAsync(current);
+        return current.ToDto();
+    }
+
+    public async Task<bool> DeleteAsync(string supplierId)
+    {
+        var current = await repository.GetByIdAsync(supplierId);
+        if (current is null)
+        {
+            return false;
+        }
+
+        await repository.DeleteAsync(current);
+        return true;
+    }
+}
