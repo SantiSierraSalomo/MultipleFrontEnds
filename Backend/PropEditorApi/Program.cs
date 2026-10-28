@@ -31,11 +31,13 @@ namespace PropEditorApi
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
             builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
             builder.Services.AddScoped<IProposalRepository, ProposalRepository>();
+            builder.Services.AddScoped<ICreateDataRepository, CreateDataRepository>();
             builder.Services.AddScoped<IFamilyService, FamilyService>();
             builder.Services.AddScoped<ISupplierService, SupplierService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IWarehouseService, WarehouseService>();
             builder.Services.AddScoped<IProposalService, ProposalService>();
+            builder.Services.AddScoped<ICreateDataService, CreateDataService>();
             builder.Services.AddScoped<IExceptionService, ExceptionService>();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
