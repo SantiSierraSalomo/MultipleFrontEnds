@@ -24,6 +24,16 @@ namespace PropEditorApi
             builder.Services.AddControllers();
             builder.Services.AddProblemDetails();
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AngularDevCors", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
             builder.Services.AddDbContext<PropEditorDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
@@ -52,6 +62,7 @@ namespace PropEditorApi
                 app.MapOpenApi();
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors("AngularDevCors");
             }
 
             app.UseExceptionHandler();
