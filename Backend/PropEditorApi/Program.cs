@@ -26,9 +26,11 @@ namespace PropEditorApi
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AngularDevCors", policy =>
+                options.AddPolicy("WebFrameworksCors", policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200")
+                    policy.WithOrigins(
+                            "http://localhost:4200",
+                            "http://localhost:5173")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
