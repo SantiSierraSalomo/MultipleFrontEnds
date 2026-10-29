@@ -1,0 +1,133 @@
+﻿<Window x:Class="WpfUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WpfUI.ViewModels"
+        xmlns:views="clr-namespace:WpfUI.Views"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+        Title="Proposal Editor &amp; Masterdata Shell - MDI Workspace"
+        Height="700" Width="1050"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Mapping ViewModels to Views in TabControl ContentTemplate -->
+        <DataTemplate DataType="{x:Type vm:ItemsViewModel}">
+            <views:ItemsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:WarehousesViewModel}">
+            <views:WarehousesView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProposalEditingViewModel}">
+            <views:ProposalEditingView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AboutViewModel}">
+            <views:AboutView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ContactViewModel}">
+            <views:ContactView />
+        </DataTemplate>
+
+        <Style x:Key="TabCloseButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Margin" Value="6,0,0,0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#777"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                            <TextBlock Text="✕" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E81123"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Menu Bar -->
+        <Menu Grid.Row="0" Background="#F0F0F0" Padding="4">
+            <MenuItem Header="_File">
+                <MenuItem Header="Close Active Tab"
+                          Command="{Binding CloseWorkspaceCommand}"
+                          CommandParameter="{Binding ActiveWorkspace}"/>
+                <MenuItem Header="Close All Tabs"
+                          Command="{Binding CloseAllWorkspacesCommand}"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="OnMenuExitClick"/>
+            </MenuItem>
+
+            <MenuItem Header="_Masterdata">
+                <MenuItem Header="_Items" Command="{Binding OpenItemsCommand}"/>
+                <MenuItem Header="_Warehouses" Command="{Binding OpenWarehousesCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Proposals">
+                <MenuItem Header="_Proposal Editing" Command="{Binding OpenProposalEditingCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Tools">
+                <MenuItem Header="_Settings" Command="{Binding OpenSettingsCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Contact" Command="{Binding OpenContactCommand}"/>
+                <MenuItem Header="_About" Command="{Binding OpenAboutCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Tabbed MDI Workspace Container -->
+        <TabControl Grid.Row="1"
+                    ItemsSource="{Binding Workspaces}"
+                    SelectedItem="{Binding ActiveWorkspace}"
+                    Margin="0">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:WorkspaceViewModelBase}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <Button Style="{StaticResource TabCloseButtonStyle}"
+                                Command="{Binding CloseCommand}"
+                                ToolTip="Close tab"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+
+        <!-- Bottom Status Bar -->
+        <StatusBar Grid.Row="2" Background="#EEEEEE">
+            <StatusBarItem>
+                <TextBlock Text="Ready" Foreground="#333333"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="MDI Workspace" Foreground="#666666"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Text="{Binding Workspaces.Count, StringFormat='{}Open Forms: {0}'}" Foreground="#666666"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
