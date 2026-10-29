@@ -1,0 +1,19 @@
+<div class="layout">
+  <header class="header">
+    <h1>Main Page</h1>
+    <p>Select a form from the menu.</p>
+  </header>
+
+  <nav class="menu">
+    <a routerLink="/proposal-editing" routerLinkActive="active-link">Proposal Editing</a>
+    <a routerLink="/masterdata/items" routerLinkActive="active-link">Masterdata: Items</a>
+    <a routerLink="/masterdata/warehouses" routerLinkActive="active-link">Masterdata: Warehouses</a>
+    <a routerLink="/settings" routerLinkActive="active-link">Settings</a>
+    <a routerLink="/about" routerLinkActive="active-link">About</a>
+    <a routerLink="/contact" routerLinkActive="active-link">Contact</a>
+  </nav>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

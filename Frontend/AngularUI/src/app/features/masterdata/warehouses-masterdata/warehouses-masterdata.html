@@ -1,0 +1,37 @@
+<section>
+  <h2>Warehouses</h2>
+  <button type="button" (click)="refresh()" [disabled]="isLoading()">Refresh</button>
+
+  @if (isLoading()) {
+  <p>Loading warehouses...</p>
+  }
+
+  @if (errorMessage()) {
+  <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (!isLoading() && !errorMessage() && rows().length === 0) {
+  <p>No warehouses found.</p>
+  }
+
+  @if (rows().length > 0) {
+  <table>
+    <thead>
+      <tr>
+        @for (column of columns(); track column) {
+        <th>{{ column }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track $index) {
+      <tr>
+        @for (column of columns(); track column) {
+        <td>{{ formatValue(row[column]) }}</td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+  }
+</section>

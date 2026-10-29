@@ -1,0 +1,31 @@
+<section>
+  <h2>Contact</h2>
+
+  <form [formGroup]="contactForm" (ngSubmit)="submit()">
+    <label>
+      Name
+      <input type="text" formControlName="name" />
+    </label>
+
+    <label>
+      Email
+      <input type="email" formControlName="email" />
+    </label>
+
+    <label>
+      Subject
+      <input type="text" formControlName="subject" />
+    </label>
+
+    <label>
+      Message
+      <textarea rows="5" formControlName="message"></textarea>
+    </label>
+
+    <button type="submit">Send email</button>
+  </form>
+
+  @if (statusMessage()) {
+  <p>{{ statusMessage() }}</p>
+  }
+</section>

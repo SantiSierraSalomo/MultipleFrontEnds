@@ -1,0 +1,78 @@
+<section class="proposal-editing">
+  <h2>Proposal Editing</h2>
+
+  <form [formGroup]="filtersForm" (ngSubmit)="showData()">
+    <label>
+      Items
+      <select formControlName="itemId">
+        <option value="">All Items</option>
+        @for (option of itemOptions(); track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Warehouses
+      <select formControlName="warehouseId">
+        <option value="">All Warehouses</option>
+        @for (option of warehouseOptions(); track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      ProposalIndex
+      <select formControlName="proposalIndex">
+        <option value="">All Indexes</option>
+        @for (option of proposalIndexOptions(); track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+
+    <button type="submit" [disabled]="isLoadingLookups() || isLoadingProposals()">Show data</button>
+  </form>
+
+  @if (isLoadingLookups()) {
+  <p>Loading filter options...</p>
+  }
+
+  @if (lookupErrorMessage()) {
+  <p class="error">{{ lookupErrorMessage() }}</p>
+  }
+
+  @if (isLoadingProposals()) {
+  <p>Loading proposals...</p>
+  }
+
+  @if (proposalErrorMessage()) {
+  <p class="error">{{ proposalErrorMessage() }}</p>
+  }
+
+  @if (!isLoadingProposals() && !proposalErrorMessage() && rows().length === 0) {
+  <p>No proposals loaded yet. Select filters and click "Show data".</p>
+  }
+
+  @if (rows().length > 0) {
+  <table>
+    <thead>
+      <tr>
+        @for (column of columns(); track column) {
+        <th>{{ column }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track $index) {
+      <tr>
+        @for (column of columns(); track column) {
+        <td>{{ formatValue(row[column]) }}</td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+  }
+</section>

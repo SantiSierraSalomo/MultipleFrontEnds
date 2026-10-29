@@ -1,0 +1,46 @@
+.layout {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 1rem;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header p {
+  color: #4b5563;
+  margin: 0.25rem 0 0;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.menu a {
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  color: #111827;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  background-color: #f3f4f6;
+}
+
+.menu .active-link {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #fff;
+}
+
+.content {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}

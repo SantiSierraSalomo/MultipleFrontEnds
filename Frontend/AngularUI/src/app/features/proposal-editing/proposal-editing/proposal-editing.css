@@ -1,0 +1,42 @@
+.proposal-editing {
+  display: grid;
+  gap: 0.75rem;
+}
+
+h2 {
+  margin: 0;
+}
+
+form {
+  align-items: end;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+label {
+  display: grid;
+  font-weight: 600;
+  gap: 0.35rem;
+}
+
+select,
+button {
+  padding: 0.45rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.error {
+  color: #b91c1c;
+}

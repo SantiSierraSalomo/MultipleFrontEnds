@@ -1,0 +1,39 @@
+<section>
+  <h2>Settings</h2>
+
+  <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
+    <label class="checkbox">
+      <input type="checkbox" formControlName="enableNotifications" />
+      Enable notifications
+    </label>
+
+    <label>
+      Theme
+      <select formControlName="theme">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="system">System</option>
+      </select>
+    </label>
+
+    <label>
+      Default page size
+      <select formControlName="pageSize">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+    </label>
+
+    <label>
+      Default warehouse display name
+      <input type="text" formControlName="defaultWarehouse" />
+    </label>
+
+    <button type="submit">Save settings</button>
+  </form>
+
+  @if (saveMessage()) {
+  <p>{{ saveMessage() }}</p>
+  }
+</section>
